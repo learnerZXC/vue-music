@@ -1,20 +1,25 @@
-import jsonp from 'common/js/jsonp'
-import { commonParams, options } from './config'
+import { commonParams } from './config'
+import axios from 'axios'
 
-export function getSingerList() {
-  const url = 'https://c.y.qq.com/v8/fcg-bin/v8.fcg'
+export function getMusic(songmid) {
+  const url = '/api/getMusic'
 
   const data = Object.assign({}, commonParams, {
-    channel: 'singer',
-    page: 'list',
-    key: 'all_all_all',
-    pagesize: 100,
-    pagenum: 1,
+    songmid: songmid,
+    filename: 'C100' + songmid + '.m4a',
+    guid: 769937799,
+    platform: 'yqq',
+    loginUin: 0,
     hostUin: 0,
     needNewCode: 0,
-    platform: 'yqq',
-    g_tk: 1664039744
+    Uin: 0,
+    cid: 205361747,
+    format: 'json'
   })
 
-  return jsonp(url, data, options)
+  return axios.get(url, {
+    params: data
+  }).then((res) => {
+    return Promise.resolve(res.data)
+  })
 }
